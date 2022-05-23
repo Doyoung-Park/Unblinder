@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Address.class);
+            public void onClick(View view) {            // 버튼을 클릭하면 address activity로 넘어감. -> FoodName activity 로 넘어감 (address 삭제)
+                Intent intent = new Intent(getApplicationContext(), FoodName.class);
                 startActivity(intent);
             }
         });
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
             }
             Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
             if(STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")){
-                Intent intent = new Intent(getApplicationContext(), Address.class);
+                Intent intent = new Intent(getApplicationContext(), FoodName.class);    // 1번 -> FoodName activity 로 넘어감
                 startActivity(intent);
             }
             else if(STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {

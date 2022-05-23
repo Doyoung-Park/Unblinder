@@ -17,10 +17,12 @@ public class FoodName extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_foodname);
 
-        Intent intent2 = getIntent();
-        String Address2 = intent2.getExtras().getString("userAddress");
 
-        System.out.println("Here is foodname page & address is: "+ Address2);   // test 용
+        //  <Address Activity 없어져서 이 부분 필요 없어짐>
+//        Intent intent2 = getIntent();
+//        String Address2 = intent2.getExtras().getString("userAddress");
+//
+//        System.out.println("Here is foodname page & address is: "+ Address2);   // test 용
 
         Button chooseButton = (Button) findViewById(R.id.foodChoose);
         TextInputEditText foodText = (TextInputEditText)findViewById(R.id.foodname);

@@ -55,6 +55,14 @@
                 android:text="짬뽕지존 / 별점 4.5"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/editTextMultiLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
         </LinearLayout>
     </HorizontalScrollView>
 

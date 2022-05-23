@@ -95,6 +95,16 @@
             app:layout_constraintStart_toStartOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
+        <EditText
+            android:id="@+id/editTextTextMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="22dp" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

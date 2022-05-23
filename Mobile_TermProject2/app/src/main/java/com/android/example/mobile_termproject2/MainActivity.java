@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     //additional
     View lay;
+    int check =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
         STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer.setRecognitionListener(listener); // 리스너 설정
 
         Button howToStartButton = (Button)findViewById(R.id.howToUse);
         Button startButton = (Button)findViewById(R.id.start);
@@ -87,15 +90,19 @@ public class MainActivity extends AppCompatActivity {
         lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TTS
-                tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
-                try {
-                    sleep(5000);
-                }catch (Exception e){
-                    e.printStackTrace();
+                if(check ==0) {
+                    //TTS
+                    mRecognizer.cancel();
+                    tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
+                    check=1;
                 }
-                //STT
-                stt();
+                else {
+                    //STT
+                    tts.stop();
+                    STT_text="";
+                    mRecognizer.startListening(STT); // 듣기 시작
+                    check=0;
+                }
             }
         });
 
@@ -114,13 +121,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void stt(){
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-        mRecognizer.setRecognitionListener(listener); // 리스너 설정
-        mRecognizer.startListening(STT); // 듣기 시작
-    }
-
-
 
     protected void onDestroy() {
         super.onDestroy();
@@ -212,14 +212,15 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < matches.size(); i++) {
                 STT_text = STT_text + matches.get(i);
             }
-            Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
-            if(STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")){
-                Intent intent = new Intent(getApplicationContext(), Address.class);
-                startActivity(intent);
-            }
-            else if(STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
-                STT_text="";
-            }
+                Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
+                if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")) {
+                    Intent intent = new Intent(getApplicationContext(), Address.class);
+                    startActivity(intent);
+                } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
+                    Intent intent = new Intent(getApplicationContext(), HowToStart.class);
+                    startActivity(intent);
+                }
+
         }
 
         @Override

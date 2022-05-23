@@ -31,7 +31,7 @@
                 android:id="@+id/multiAutoCompleteTextView"
                 android:layout_width="374dp"
                 android:layout_height="match_parent"
-                android:text="사용법은 다음과 같다 \n1. 음성이 끝난 후에 말씀하세요.\n2. 뒤로 가실려면 뒤로 라고 말씀해 주세요."
+                android:text="사용법은 다음과 같다 \n1. 처음 터치시 음성이 출력됩니다.\n2. 두번째 터치 후 말씀 하시면 됩니다.\n3. 다시 듣고 싶으시면 한번 더 터치하시면 됩니다."
                 android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>

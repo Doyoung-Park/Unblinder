@@ -1,3 +1,4 @@
+/*
 package com.android.example.mobile_termproject2;
 
 import static java.lang.Thread.sleep;
@@ -32,4 +33,4 @@ public class Address extends AppCompatActivity {
             }
         });
     }
-}
+}*/

@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.location.Address;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -47,6 +48,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        Button howToStartButton = (Button)findViewById(R.id.howToUse);
+        Button startButton = (Button)findViewById(R.id.start);
+        howToStartButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HowToStart.class);
+                startActivity(intent);
+            }
+        });
+
+
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityMain);
         TTS_text = "시작하실려면 1번 사용법을 궁금하시면 2번을 말씀해 주세요.";
@@ -57,26 +70,12 @@ public class MainActivity extends AppCompatActivity {
         STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
-
-        Button howToStartButton = (Button)findViewById(R.id.howToUse);
-        Button startButton = (Button)findViewById(R.id.start);
-
-
         //음성인식 허용
         // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
         if(Build.VERSION.SDK_INT >= 23){
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET,
                     Manifest.permission.RECORD_AUDIO},PERMISSION);
         }
-
-
-        howToStartButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HowToStart.class);
-                startActivity(intent);
-            }
-        });
 
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             }
                 Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
                 if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")) {
-                    Intent intent = new Intent(getApplicationContext(), Address.class);
+                    Intent intent = new Intent(getApplicationContext(), FoodName.class);
                     startActivity(intent);
                 } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
                     Intent intent = new Intent(getApplicationContext(), HowToStart.class);

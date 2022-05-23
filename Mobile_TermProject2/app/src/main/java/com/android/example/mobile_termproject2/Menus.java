@@ -56,6 +56,17 @@ public class Menus extends AppCompatActivity {
             }
         });
 
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+        //메뉴를 string list로 받아오기
+
+
+
+
+
+
+
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키

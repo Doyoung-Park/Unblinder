@@ -62,7 +62,7 @@ public class Stores extends AppCompatActivity {
         String food = getIntent().getStringExtra("food");
 
         //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-
+        //식당이름리스트를 string list로 받아오기
 
 
 

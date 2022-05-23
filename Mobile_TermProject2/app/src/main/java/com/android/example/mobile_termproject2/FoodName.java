@@ -39,6 +39,7 @@ public class FoodName extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.input_foodname);
 
             Button chooseButton = (Button) findViewById(R.id.foodChoose);
             chooseButton.setOnClickListener(new View.OnClickListener(){

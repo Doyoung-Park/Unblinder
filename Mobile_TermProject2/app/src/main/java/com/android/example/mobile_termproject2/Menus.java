@@ -19,6 +19,13 @@ public class Menus extends AppCompatActivity {
         // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)
         Button call = (Button)findViewById(R.id.chooseMenu);
 
+//        // GettingMenus class 에서 보낸 intent 받는 부분 시작
+//        Intent intent5 = getIntent();
+//        String menuIntent = intent5.getExtras().getString("menuList");
+//
+//        System.out.println("Here is Menu page & MenuList is: "+ menuIntent);   // test 용
+//        // 받는 부분 여기까지
+
         call.setOnClickListener(new View.OnClickListener(){
 
             @Override

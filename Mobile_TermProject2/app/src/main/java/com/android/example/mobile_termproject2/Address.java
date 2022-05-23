@@ -4,12 +4,12 @@ import static java.lang.Thread.sleep;
 
 import android.content.Intent;
 import android.os.Bundle;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
-=======
+//=======
 import android.util.Log;
->>>>>>> doyoung
+//>>>>>>> doyoung
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,14 +41,14 @@ public class Address extends AppCompatActivity {
 
                 // userAddress 라는 이름으로 intent 에 담음.
                 Intent intent = new Intent(getApplicationContext(), FoodName.class);
-<<<<<<< HEAD
+//<<<<<<< HEAD
                 startActivity(intent);
 
-=======
+//=======
                 intent.putExtra("userAddress",userAddress);
 
                 startActivity(intent);  // foodName 액티비티 열어둠 (단방향)
->>>>>>> doyoung
+//>>>>>>> doyoung
             }
         });
 

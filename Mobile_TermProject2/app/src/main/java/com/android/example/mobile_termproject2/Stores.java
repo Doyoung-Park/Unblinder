@@ -15,10 +15,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 
 public class Stores extends AppCompatActivity {
+
+    // 크롤링용 변수
+    String keyword = "null";
+    int action = -1;
+    String id = "";
+    String phoneNum = "";
 
     //음성인식 허용(STT)
     SpeechRecognizer mRecognizer;
@@ -54,6 +61,24 @@ public class Stores extends AppCompatActivity {
         //Food option
         String food = getIntent().getStringExtra("food");
 
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityStore);
         TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
@@ -207,4 +232,24 @@ public class Stores extends AppCompatActivity {
             // 향후 이벤트를 추가하기 위해 예약
         }
     };
+
+
+
+    //준형,주형
+    public String[] stringcutter(String message) {
+        String[] list = message.split("<span class=\"OXiLu\">", 0);
+
+        int size = Integer.parseInt(list[0]);
+
+        String new_list[] = new String[size];
+
+        new_list[0] = list[0];
+
+        for (int i = 1; i < Integer.parseInt(list[0]); i++) {
+            String[] each_list = list[i].split("</span>", 0);
+            new_list[i] = each_list[0];
+        }
+
+        return new_list;
+    }
 }

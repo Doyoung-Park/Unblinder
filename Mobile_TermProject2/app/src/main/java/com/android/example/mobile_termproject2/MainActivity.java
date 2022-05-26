@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.location.Address;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,6 +17,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,29 +40,17 @@ public class MainActivity extends AppCompatActivity {
     String TTS_text;
 
     //additional
-    ImageView img;
+    View lay;
+    int check =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //이미지 및 TTS 설정
-        img=findViewById(R.id.imageView);
-        TTS_text = "시작하실려면 1번 사용법을 궁금하시면 2번을 말씀해 주세요.";
-        tts();
-
 
         Button howToStartButton = (Button)findViewById(R.id.howToUse);
         Button startButton = (Button)findViewById(R.id.start);
-
-        //음성인식 허용
-        // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
-        if(Build.VERSION.SDK_INT >= 23){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO},PERMISSION);
-        }
-
         howToStartButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -69,27 +59,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //이미지 및 TTS 설정
+        lay=findViewById(R.id.activityMain);
+        TTS_text = "시작하시려면 1번, 사용법이 궁금하시면 2번을 말씀해 주세요.";
+        tts();
+        // RecognizerIntent 생성
+        STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
+        STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer.setRecognitionListener(listener); // 리스너 설정
+        //음성인식 허용
+        // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
+        if(Build.VERSION.SDK_INT >= 23){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET,
+                    Manifest.permission.RECORD_AUDIO},PERMISSION);
+        }
+
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {            // 버튼을 클릭하면 address activity로 넘어감. -> FoodName activity 로 넘어감 (address 삭제)
+
+            public void onClick(View view) {
+
                 Intent intent = new Intent(getApplicationContext(), FoodName.class);
                 startActivity(intent);
             }
         });
 
         //이미지 클릭시 TTS,STT설정
-        img.setOnClickListener(new View.OnClickListener() {
+        lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TTS
-                tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
-                try {
-                    sleep(5000);
-                }catch (Exception e){
-                    e.printStackTrace();
+                if(check ==0) {
+                    //TTS
+                    mRecognizer.cancel();
+                    tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
+                    check=1;
                 }
-                //STT
-                stt();
+                else {
+                    //STT
+                    tts.stop();
+                    STT_text="";
+                    mRecognizer.startListening(STT); // 듣기 시작
+                    check=0;
+                }
             }
         });
 
@@ -108,16 +122,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void stt(){
-        // RecognizerIntent 생성
-        STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
-        STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
-
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-        mRecognizer.setRecognitionListener(listener); // 리스너 설정
-        mRecognizer.startListening(STT); // 듣기 시작
-    }
 
     protected void onDestroy() {
         super.onDestroy();
@@ -128,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
             tts = null;
         }
     }
+
 
     //이하STT임
     private RecognitionListener listener = new RecognitionListener() {
@@ -205,19 +210,20 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> matches =
                     results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-            for(int i = 0; i < matches.size() ; i++){
-                STT_text=STT_text+matches.get(i);
+
+            for (int i = 0; i < matches.size(); i++) {
+                STT_text = STT_text + matches.get(i);
+
             }
-            Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
-            if(STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")){
-                Intent intent = new Intent(getApplicationContext(), FoodName.class);    // 1번 -> FoodName activity 로 넘어감
-                startActivity(intent);
-            }
-            else if(STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
-                Intent intent = new Intent(getApplicationContext(), HowToStart.class);
-                startActivity(intent);
-            }
-            STT_text="";
+                Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
+                if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")|| STT_text.equals("앨범")) {
+                    Intent intent = new Intent(getApplicationContext(), FoodName.class);
+                    startActivity(intent);
+                } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
+                    Intent intent = new Intent(getApplicationContext(), HowToStart.class);
+                    startActivity(intent);
+                }
+
         }
 
         @Override

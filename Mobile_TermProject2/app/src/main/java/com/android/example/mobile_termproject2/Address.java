@@ -1,3 +1,4 @@
+
 // Address activity 필요 없어짐.
 
 //package com.android.example.mobile_termproject2;

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityMain);
-        TTS_text = "시작하실려면 1번 사용법을 궁금하시면 2번을 말씀해 주세요.";
+        TTS_text = "시작하시려면 1번, 사용법이 궁금하시면 2번을 말씀해 주세요.";
         tts();
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

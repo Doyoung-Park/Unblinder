@@ -29,11 +29,11 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".HowToStart"/>
+        <activity android:name=".IntroductionActivity"/>
         <activity android:name=".Address"/>
         <activity android:name=".FoodName"/>
-        <activity android:name=".Stores"/>
-        <activity android:name=".Menus"/>
+        <activity android:name=".StoreActivity"/>
+        <activity android:name=".MenuActivity"/>
     </application>
 
 </manifest>

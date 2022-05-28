@@ -2,9 +2,8 @@ package com.android.example.mobile_termproject2;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
-import static java.lang.Thread.sleep;
-
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class FoodName extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     //음성인식 허용(STT)
     SpeechRecognizer mRecognizer;
@@ -28,58 +27,79 @@ public class FoodName extends AppCompatActivity {
     Intent STT;
     String STT_text="";
 
+
     //TTS
     public TextToSpeech tts;
     String TTS_text;
 
     //additional
     View lay;
-    int check =0;
+    int check=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.input_foodname);
+        setContentView(R.layout.show_menus);
 
-            Button chooseButton = (Button) findViewById(R.id.foodChoose);
-            chooseButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), Stores.class);
-                    startActivity(intent);
-                }
-            });
+        // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)
+        Button call = (Button)findViewById(R.id.chooseMenu);
 
-        //이미지 및 TTS 설정
-        lay=findViewById(R.id.activityFoodname);
-        TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
-        tts();
+        call.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel: 02-123-4567"));
+
+                startActivity(intent);
+            }
+        });
+
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+        //메뉴를 string list로 받아오기
+
+
+
+
+
+
+
+        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
         STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(FoodName.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MenuActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
 
-        //이미지 클릭시 TTS,STT설정
-        lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(check ==0) {
-                    //TTS
-                    mRecognizer.cancel();
-                    tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
-                    check=1;
+         //이미지 및 TTS 설정
+            lay=findViewById(R.id.activityMenus);
+            TTS_text = "메뉴는 다음과 같습니다.";
+            //
+            tts();
+
+            //이미지 클릭시 TTS,STT설정
+            lay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(check ==0) {
+                        //TTS
+                        mRecognizer.cancel();
+                        tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
+                        check=1;
+                    }
+                    else {
+                        //STT
+                        tts.stop();
+                        STT_text="";
+                        mRecognizer.startListening(STT); // 듣기 시작
+                        check=0;
+                    }
                 }
-                else {
-                    //STT
-                    tts.stop();
-                    STT_text="";
-                    mRecognizer.startListening(STT); // 듣기 시작
-                    check=0;
-                }
-            }
-        });
+            });
+
         }
 
         public void tts (){
@@ -93,6 +113,7 @@ public class FoodName extends AppCompatActivity {
                     }
                 }
             });
+
         }
 
         protected void onDestroy() {
@@ -186,11 +207,6 @@ public class FoodName extends AppCompatActivity {
                     STT_text=STT_text+matches.get(i);
                 }
                 Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
-                if(STT_text != "") {
-                    Intent intent = new Intent(getApplicationContext(), Stores.class);
-                    intent.putExtra("food", STT_text);
-                    startActivity(intent);
-                }
             }
 
             @Override
@@ -203,4 +219,4 @@ public class FoodName extends AppCompatActivity {
                 // 향후 이벤트를 추가하기 위해 예약
             }
         };
-    }
+}

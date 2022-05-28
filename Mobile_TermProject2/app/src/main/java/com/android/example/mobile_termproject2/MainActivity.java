@@ -9,18 +9,14 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
-import android.location.Address;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
-import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         howToStartButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HowToStart.class);
+                Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);
                 startActivity(intent);
             }
         });
@@ -80,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FoodName.class);
+                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
                 startActivity(intent);
             }
         });
@@ -213,10 +209,10 @@ public class MainActivity extends AppCompatActivity {
             }
                 Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
                 if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")) {
-                    Intent intent = new Intent(getApplicationContext(), FoodName.class);
+                    Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
                     startActivity(intent);
                 } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
-                    Intent intent = new Intent(getApplicationContext(), HowToStart.class);
+                    Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);
                     startActivity(intent);
                 }
 

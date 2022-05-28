@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 
-public class HowToStart extends AppCompatActivity {
+public class IntroductionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

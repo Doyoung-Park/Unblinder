@@ -107,7 +107,6 @@ public class StoreActivity extends AppCompatActivity {
                     // 쓰레드 간의 데이터 전송을 위한 객체
                     Message msg1 = handler.obtainMessage();
                     msg1.setData(bundle1);
-
                     handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -136,10 +135,6 @@ public class StoreActivity extends AppCompatActivity {
 
                     updateID(storeNameKeyword);
                     id = idcutter(bundle1.getString("id"));
-
-                    bundle1.putString("id", id);
-
-
 
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                     intent.putExtra("id", id);
@@ -194,6 +189,8 @@ public class StoreActivity extends AppCompatActivity {
                 resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
             test.setText(resultTest);
+
+
         }
     };
 
@@ -367,8 +364,11 @@ public class StoreActivity extends AppCompatActivity {
                 tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
             }
             else{
+                updateID(storeList[select]);
+                id = idcutter(bundle1.getString("id"));
                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                 intent.putExtra("store", storeList[select]);
+                intent.putExtra("id", id);
                 startActivity(intent);
             }
         }

@@ -9,11 +9,11 @@
     android:id="@+id/activityMenus">
 
     <Button
-        android:id="@+id/chooseMenu"
+        android:id="@+id/call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
-        android:text="선택"
+        android:text="전화걸기"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="44dp" />
 
@@ -60,41 +60,41 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:text="1. 지존 짜장 - 8,000원"
+            android:text="잠시만 기다려주세요..."
             android:textColor="@color/white"
             android:textSize="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2. 지존 짬뽕 - 11,000원"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView2"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="2. 지존 짬뽕 - 11,000원"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20dp"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/textView"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
 
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3. 찹쌀 탕수육 - 13,000원"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView7"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="3. 찹쌀 탕수육 - 13,000원"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20dp"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/textView2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView2" />-->
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4. 지존 탕수육 - 15,000원"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+<!--        <TextView-->
+<!--            android:id="@+id/textView6"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="4. 지존 탕수육 - 15,000원"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20dp"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/textView7"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView7" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

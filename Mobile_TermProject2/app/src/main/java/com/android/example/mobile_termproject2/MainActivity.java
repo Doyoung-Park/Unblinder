@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             }
                 Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
                 if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")) {
-                    Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), FoodActivity.class);
                     startActivity(intent);
                 } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
                     Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);

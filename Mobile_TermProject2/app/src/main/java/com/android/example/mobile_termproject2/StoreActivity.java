@@ -40,7 +40,7 @@ public class StoreActivity extends AppCompatActivity {
     private String totalStores = "";
     private int storeCount = 0;
 
-
+    //식당
     private String[] storeList= null;
 
     //test용
@@ -60,6 +60,7 @@ public class StoreActivity extends AppCompatActivity {
     //TTS
     public TextToSpeech tts;
     String TTS_text;
+    int sizeofList =0;
 
     //additional
     View lay;
@@ -79,6 +80,8 @@ public class StoreActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.inputStoreName);
 
+        //메뉴 받기
+        keyword= getIntent().getStringExtra("food");
 
 
         Button btnSelectStore = (Button)findViewById(R.id.btnSelectStore);
@@ -132,7 +135,6 @@ public class StoreActivity extends AppCompatActivity {
         //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityStore);
-        TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
         tts();
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -145,6 +147,7 @@ public class StoreActivity extends AppCompatActivity {
         lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TTS_text = "선택하신 메뉴 "+keyword+"에 대한 검색 결과 입니다.\n"+resultTest;
                 if(check ==0) {
                     //TTS
                     mRecognizer.cancel();
@@ -171,8 +174,8 @@ public class StoreActivity extends AppCompatActivity {
 
             //scroll view update
             resultTest = "";
-            for (int i = 0; i < storeCount; i++) {
-                resultTest = resultTest.concat((storeList[i])+ "\n");
+            for (int i = 1; i < storeCount; i++) {
+                resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
 
             test.setText(resultTest);

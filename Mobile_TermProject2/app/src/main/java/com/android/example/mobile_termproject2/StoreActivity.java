@@ -221,21 +221,20 @@ public class StoreActivity extends AppCompatActivity {
     }
 
     public void updateID(String storeName) {
-        Document doc2 = null;
+        final Document[] doc2 = {null};
         new Thread() {
             @Override
             public void run() {
                 String url_for_id = "https://m.search.naver.com/search.naver?sm=mtp_sly.hst&where=m&query=" + storeName;
                 try {
-                    doc2 = Jsoup.connect(url_for_id).get();
+                    doc2[0] = Jsoup.connect(url_for_id).get();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-
-                Elements elements = doc2.select(".place_thumb._2SYdz");
+                Elements elements = doc2[0].select(".place_thumb._2SYdz");
                 String text = elements.attr("href");
-                // id 없는 href 관련 https://myitis5212.tistory.com/39
                 System.out.println(text);
                 // 쓰레드 간의 데이터 전송을 위한 객체
                 bundle1.putString("id", text);

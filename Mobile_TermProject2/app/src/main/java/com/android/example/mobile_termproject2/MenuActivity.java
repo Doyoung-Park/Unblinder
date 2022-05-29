@@ -39,7 +39,7 @@ public class MenuActivity extends AppCompatActivity {
     // 메뉴용 변수들
     String id = "";
 
-    String url_for_menu = "https://m.store.naver.com/restaurants/35255743/tabs/menus/baemin/list"; // 도원참치 판교점 메뉴용
+    String url_for_menu = null;
     String msg_name;                    // 매뉴 이름을 저장할 변수
 
     TextView textView; // 메뉴를 띄워줄 텍스트뷰
@@ -73,6 +73,11 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
+
+        id = getIntent().getStringExtra("id");
+
+        System.out.println(id);
+        url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list";
 
 
         // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)

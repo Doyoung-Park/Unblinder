@@ -45,9 +45,8 @@ public class StoreActivity extends AppCompatActivity {
 
     //test용
     String resultTest;
-
-
-    final Bundle bundle1 = new Bundle();
+    Bundle bundle = new Bundle();
+    Bundle bundle1 = new Bundle();
 
     private StoreView storeView;
 
@@ -86,8 +85,7 @@ public class StoreActivity extends AppCompatActivity {
         btnSelectStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                keyword = editText.getText().toString();
                 new Thread() {
                     @Override
 
@@ -96,7 +94,8 @@ public class StoreActivity extends AppCompatActivity {
 
 
                         try {
-                            keyword = editText.getText().toString();
+                            totalStores = "";
+
                             String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword + " 배달";
                             doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
                             Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
@@ -166,7 +165,7 @@ public class StoreActivity extends AppCompatActivity {
     Handler handler = new Handler (Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
+            bundle = msg.getData();
             String parsed_total_restaurant = bundle.getString("stores");
             storeList = stringcutter(parsed_total_restaurant);
 
@@ -177,7 +176,6 @@ public class StoreActivity extends AppCompatActivity {
             }
 
             test.setText(resultTest);
-
         }
     };
 

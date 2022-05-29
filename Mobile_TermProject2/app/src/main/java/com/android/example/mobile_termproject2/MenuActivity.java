@@ -38,6 +38,7 @@ import java.util.Set;
 public class MenuActivity extends AppCompatActivity {
     // 메뉴용 변수들
     String id = "";
+    String StoreName="";
 
     String url_for_menu = null;
     String msg_name;                    // 매뉴 이름을 저장할 변수
@@ -75,6 +76,7 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.show_menus);
 
         id = getIntent().getStringExtra("id");
+        StoreName= getIntent().getStringExtra("food");
 
         System.out.println(id);
         url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list";

@@ -77,11 +77,12 @@ public class StoreActivity extends AppCompatActivity {
 
         test = findViewById(R.id.test);
 
-
-        editText = findViewById(R.id.inputStoreName);
-
         //메뉴 받기
         keyword= getIntent().getStringExtra("food");
+
+        editText = findViewById(R.id.inputStoreName);
+        editText.setText(keyword);
+
 
         Button btnBack = (Button) findViewById(R.id.btnPrev);
         btnBack.setOnClickListener(new View.OnClickListener() {

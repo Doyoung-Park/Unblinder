@@ -2,6 +2,8 @@ package com.android.example.mobile_termproject2;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,10 +40,11 @@ import java.util.Set;
 public class MenuActivity extends AppCompatActivity {
     // 메뉴용 변수들
     String id = "";
-    String StoreName="";
+    String StoreName = "";
 
-    String url_for_menu = null;
-    String msg_name;                    // 매뉴 이름을 저장할 변수
+    String url_for_menu = null; // 메뉴용 url
+    String url_for_phone = null; // 전화번호용 url
+    String num = null; // 쓰레드에서 핸들러에 안넘기고 바로 전역변수에 저장 시키기
 
     TextView textView; // 메뉴를 띄워줄 텍스트뷰
 
@@ -76,26 +79,13 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.show_menus);
 
         id = getIntent().getStringExtra("id");
-        StoreName= getIntent().getStringExtra("food");
+        StoreName = getIntent().getStringExtra("food");
+
 
         System.out.println(id);
-        url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list";
+        url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list"; // 메뉴용 url
+        url_for_phone = "https://m.place.naver.com/restaurant/" + id + "/home"; // 전화번호용 url
 
-
-        // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)
-        Button call = (Button) findViewById(R.id.call);
-
-        call.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel: 02-123-4567"));
-
-                startActivity(intent);
-            }
-        });
 
         //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //메뉴를 string list로 받아오기
@@ -109,6 +99,13 @@ public class MenuActivity extends AppCompatActivity {
             public void run() {
                 Document doc = null;
                 try {
+
+                    doc = Jsoup.connect(url_for_phone).get();
+                    Elements phone_num = doc.select("._3HEBM");
+                    num = phone_num.attr("href");
+                    // num = "tel:0505-3143-8692";
+                    System.out.println(num);
+
                     // '대표메뉴' 카테고리 추가하기
                     doc = Jsoup.connect(url_for_menu).get(); // 이 주소의 html코드를 싹 가져오겠다
                     Elements main_menu = doc.select("h2"); // 클래스 네임 "name"(메뉴 이름)인 값을 가져오겠다
@@ -166,6 +163,21 @@ public class MenuActivity extends AppCompatActivity {
             }
         }.start();
 
+
+        // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)
+        Button call = (Button) findViewById(R.id.call);
+
+        call.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(num));
+
+                startActivity(intent);
+            }
+        });
 
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -348,7 +360,7 @@ public class MenuActivity extends AppCompatActivity {
                 STT_text = STT_text + matches.get(i);
             }
             Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
-            if(STT_text.equals("뒤로")){
+            if (STT_text.equals("뒤로")) {
                 finish();
             }
         }

@@ -96,7 +96,7 @@ public class MenuActivity extends AppCompatActivity {
 
             public void run() {
                 Document doc = null;
-                try {
+                try { //
 
                     doc = Jsoup.connect(url_for_phone).get();
                     Elements phone_num = doc.select("._3HEBM");

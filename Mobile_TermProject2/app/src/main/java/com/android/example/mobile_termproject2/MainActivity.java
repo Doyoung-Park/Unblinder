@@ -24,7 +24,7 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    // 박준영
     //음성인식 허용(STT)
     SpeechRecognizer mRecognizer;
     final int PERMISSION = 1;

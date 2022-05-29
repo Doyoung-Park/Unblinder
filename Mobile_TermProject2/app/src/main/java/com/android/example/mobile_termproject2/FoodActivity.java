@@ -51,6 +51,8 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
 
+
+
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityFoodname);
         TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";

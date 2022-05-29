@@ -36,7 +36,7 @@ public class StoreActivity extends AppCompatActivity {
     String id = "";
     private String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
     private Document doc = null;
-    private String storeClass = "OXiLu";
+    private String storeClass = getString(R.string.storeHTMLClassName);
     private String totalStores = "";
     private int storeCount = 0;
 
@@ -83,43 +83,15 @@ public class StoreActivity extends AppCompatActivity {
         //메뉴 받기
         keyword= getIntent().getStringExtra("food");
 
-
-        Button btnSelectStore = (Button)findViewById(R.id.btnSelectStore);
-        btnSelectStore.setOnClickListener(new View.OnClickListener() {
+        Button btnBack = (Button) findViewById(R.id.btnPrev);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyword = editText.getText().toString();
-                new Thread() {
-                    @Override
-
-                    public void run() {
-                        Document doc = null;
-
-
-                        try {
-                            totalStores = "";
-
-                            String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword + " 배달";
-                            doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
-                            Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
-
-                            storeCount = elements_name.size();
-                            for (int i = 0; i < elements_name.size(); i++) {
-                                totalStores = totalStores.concat(elements_name.get(i).toString());
-                            }
-                            bundle1.putString("stores", totalStores); // (key값, value값) 메뉴 이름
-                            // 쓰레드 간의 데이터 전송을 위한 객체
-                            Message msg1 = handler.obtainMessage();
-                            msg1.setData(bundle1);
-                            handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }.start();
+                finish();
             }
         });
+
+
 
 
             Button btnToMenu = (Button)findViewById(R.id.btnToMenu);

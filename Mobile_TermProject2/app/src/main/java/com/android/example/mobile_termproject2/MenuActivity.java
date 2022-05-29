@@ -149,7 +149,6 @@ public class MenuActivity extends AppCompatActivity {
         }.start();
 
 
-        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
 
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

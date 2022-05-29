@@ -2,55 +2,25 @@ package com.android.example.mobile_termproject2;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class StoreActivity extends AppCompatActivity {
-
-    // 크롤링용 변수
-    String keyword = "null";
-    String id = "";
-    private String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
-    private Document doc = null;
-    private String storeClass = "OXiLu";
-    private String totalStores = "";
-    private int storeCount = 0;
-
-
-    private String[] storeList= null;
-
-    //test용
-    String resultTest;
-
-
-    final Bundle bundle1 = new Bundle();
-
-    private StoreView storeView;
-
+public class FoodActivity extends AppCompatActivity {
 
     //음성인식 허용(STT)
     SpeechRecognizer mRecognizer;
@@ -66,80 +36,29 @@ public class StoreActivity extends AppCompatActivity {
     View lay;
     int check =0;
 
-    TextView test;
-    EditText editText;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_stores);
+        setContentView(R.layout.input_foodname);
 
-        test = findViewById(R.id.test);
-
-
-        editText = findViewById(R.id.inputStoreName);
-
-
-
-        Button btnSelectStore = (Button)findViewById(R.id.btnSelectStore);
-        btnSelectStore.setOnClickListener(new View.OnClickListener() {
+        Button chooseButton = (Button) findViewById(R.id.foodChoose);
+        chooseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
-
-                new Thread() {
-                    @Override
-
-                    public void run() {
-                        Document doc = null;
-
-
-                        try {
-                            keyword = editText.getText().toString();
-                            String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword + " 배달";
-                            doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
-                            Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
-
-                            storeCount = elements_name.size();
-                            for (int i = 0; i < elements_name.size(); i++) {
-                                totalStores = totalStores.concat(elements_name.get(i).toString());
-                            }
-                            bundle1.putString("stores", totalStores); // (key값, value값) 메뉴 이름
-                            // 쓰레드 간의 데이터 전송을 위한 객체
-                            Message msg1 = handler.obtainMessage();
-                            msg1.setData(bundle1);
-                            handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }.start();
+                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                startActivity(intent);
             }
         });
 
-
-            Button btnToMenu = (Button)findViewById(R.id.btnToMenu);
-            btnToMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-
-        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //이미지 및 TTS 설정
-        lay=findViewById(R.id.activityStore);
+        lay=findViewById(R.id.activityFoodname);
         TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
         tts();
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
         STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(StoreActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(FoodActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
 
         //이미지 클릭시 TTS,STT설정
@@ -163,38 +82,6 @@ public class StoreActivity extends AppCompatActivity {
         });
     }
 
-    Handler handler = new Handler (Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String parsed_total_restaurant = bundle.getString("stores");
-            storeList = stringcutter(parsed_total_restaurant);
-
-            //scroll view update
-            resultTest = "";
-            for (int i = 0; i < storeCount; i++) {
-                resultTest = resultTest.concat((storeList[i])+ "\n");
-            }
-
-            test.setText(resultTest);
-
-        }
-    };
-
-    public String[] stringcutter(String message) {
-        String[] list = message.split("<span class=\"" + storeClass + "\">", 0);
-
-
-        String new_list[] = new String[storeCount];
-
-        for (int i = 0; i < storeCount; i++) {
-            String[] each_list = list[i].split("</span>", 0);
-            new_list[i] = each_list[0];
-        }
-
-        return new_list;
-    }
-
     public void tts (){
         // TTS를 생성하고 OnInitListener로 초기화 한다.
         tts = new TextToSpeech(this , new TextToSpeech.OnInitListener() {
@@ -208,15 +95,15 @@ public class StoreActivity extends AppCompatActivity {
         });
     }
 
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
-//        if(tts != null){
-//            tts.stop();
-//            tts.shutdown();
-//            tts = null;
-//        }
-//    }
+    protected void onDestroy() {
+        super.onDestroy();
+        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
+    }
 
 
     //이하STT임
@@ -316,6 +203,4 @@ public class StoreActivity extends AppCompatActivity {
             // 향후 이벤트를 추가하기 위해 예약
         }
     };
-
-
 }

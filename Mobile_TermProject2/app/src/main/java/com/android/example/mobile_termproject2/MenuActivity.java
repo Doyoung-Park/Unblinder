@@ -74,7 +74,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
 
-        id = getIntent().getStringExtra("id");
+        while (id == "") id = getIntent().getStringExtra("id");
 
         System.out.println(id);
         url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list";
@@ -95,10 +95,12 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+
+
         //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //메뉴를 string list로 받아오기
 
-        textView = (TextView) findViewById(R.id.textView); // TextView textView = ~~ 식으로 하면 앱이 계속 꺼짐 ㄷㄷ
+        textView = (TextView) findViewById(R.id.textView);
         final Bundle bundle = new Bundle(); // 메뉴 이름 스트링 전달용 번들
 
         new Thread() {

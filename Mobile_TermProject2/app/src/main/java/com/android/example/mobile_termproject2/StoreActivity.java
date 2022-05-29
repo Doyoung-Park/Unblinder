@@ -107,6 +107,7 @@ public class StoreActivity extends AppCompatActivity {
                     // 쓰레드 간의 데이터 전송을 위한 객체
                     Message msg1 = handler.obtainMessage();
                     msg1.setData(bundle1);
+
                     handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -135,6 +136,9 @@ public class StoreActivity extends AppCompatActivity {
 
                     updateID(storeNameKeyword);
                     id = idcutter(bundle1.getString("id"));
+
+                    bundle1.putString("id", id);
+
 
 
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
@@ -190,8 +194,6 @@ public class StoreActivity extends AppCompatActivity {
                 resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
             test.setText(resultTest);
-
-
         }
     };
 

@@ -4,63 +4,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="#F7F5F2"
     android:orientation="vertical"
     tools:context=".MainActivity"
     android:id="@+id/activityStore">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/teal_200">
-
-    <EditText
-        android:id="@+id/inputStoreName"
-        android:text="식당이름"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></EditText>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F7F5F2">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnSelectStore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:text="선택"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <Button
-        android:id="@+id/btnToMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:text="메뉴"
-        app:layout_constraintEnd_toEndOf="parent" />
+            <Button
+                android:id="@+id/btnPrev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="#F56D91"
+                android:text="@string/prev"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/inputStoreName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#DFDFDE"
+                android:text="식당이름"></EditText>
+
+            <Button
+                android:id="@+id/btnToMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="#F56D91"
+                android:text="식당선택"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="625dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="null"
+                android:textSize="30dp"></TextView>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPrevPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="#F56D91"
+                android:text="@string/prevPage"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnNextPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:backgroundTint="#F56D91"
+                android:text="@string/nextPage"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-
-    <FrameLayout
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_height="match_parent">
-        <FrameLayout
-            android:id="@+id/storeViewContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/test"
-                android:textSize="30dp"
-                android:text="null"></TextView>
-
-        </FrameLayout>
-    </FrameLayout>
 
 </LinearLayout>

@@ -32,7 +32,7 @@ import java.util.Locale;
 public class StoreActivity extends AppCompatActivity {
 
     // 크롤링용 변수
-    String keyword = "null";
+    String foodName = "null";
     String id = "";
     private String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
     private Document doc = null;
@@ -40,13 +40,13 @@ public class StoreActivity extends AppCompatActivity {
     private String totalStores = "";
     private int storeCount = 0;
 
+    //식당
     private String[] storeList= null;
 
     //test용
     String resultTest;
-
-
-    final Bundle bundle1 = new Bundle();
+    Bundle bundle = new Bundle();
+    Bundle bundle1 = new Bundle();
 
     private StoreView storeView;
 
@@ -67,6 +67,7 @@ public class StoreActivity extends AppCompatActivity {
 
     TextView test;
     EditText editText;
+    String storeNameKeyword;
 
 
     @Override
@@ -76,43 +77,52 @@ public class StoreActivity extends AppCompatActivity {
 
         test = findViewById(R.id.test);
 
+        //메뉴 받기
+        foodName= getIntent().getStringExtra("food");
 
         editText = findViewById(R.id.inputStoreName);
 
 
+        //keyword = editText.getText().toString();
 
-        Button btnSelectStore = (Button)findViewById(R.id.btnSelectStore);
-        btnSelectStore.setOnClickListener(new View.OnClickListener() {
+        new Thread() {
+            @Override
+
+            public void run() {
+                Document doc = null;
+
+
+                try {
+                    totalStores = "";
+
+                    String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + foodName + " 배달";
+                    doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
+                    Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
+
+                    storeCount = elements_name.size();
+                    for (int i = 0; i < elements_name.size(); i++) {
+                        totalStores = totalStores.concat(elements_name.get(i).toString());
+                    }
+                    bundle1.putString("stores", totalStores); // (key값, value값) 메뉴 이름
+                    // 쓰레드 간의 데이터 전송을 위한 객체
+                    Message msg1 = handler.obtainMessage();
+                    msg1.setData(bundle1);
+                    handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }.start();
+
+
+
+        Button btnPrev= (Button)findViewById(R.id.btnPrev);
+        btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyword = editText.getText().toString();
+                finish();
 
-                new Thread() {
-                    @Override
-
-                    public void run() {
-                        Document doc = null;
-
-                        try {
-                            String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword;
-                            doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
-                            Elements elements_name = doc.getElementsByAttributeValue("class", "OXiLu");
-
-                            storeCount = elements_name.size();
-                            for (int i = 0; i < elements_name.size(); i++) {
-                                totalStores = totalStores.concat(elements_name.get(i).toString());
-                            }
-                            bundle1.putString("stores", totalStores); // (key값, value값) 메뉴 이름
-                            // 쓰레드 간의 데이터 전송을 위한 객체
-                            Message msg1 = handler.obtainMessage();
-                            msg1.setData(bundle1);
-                            handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }.start();
             }
         });
 
@@ -121,7 +131,14 @@ public class StoreActivity extends AppCompatActivity {
             btnToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    storeNameKeyword = editText.getText().toString();
+
+                    updateID(storeNameKeyword);
+                    id = idcutter(bundle1.getString("id"));
+
+
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    intent.putExtra("id", id);
                     startActivity(intent);
                 }
             });
@@ -130,7 +147,6 @@ public class StoreActivity extends AppCompatActivity {
         //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityStore);
-        TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
         tts();
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -143,6 +159,7 @@ public class StoreActivity extends AppCompatActivity {
         lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TTS_text = "선택하신 메뉴 "+foodName+"에 대한 검색 결과 입니다.\n"+resultTest;
                 if(check ==0) {
                     //TTS
                     mRecognizer.cancel();
@@ -163,23 +180,23 @@ public class StoreActivity extends AppCompatActivity {
     Handler handler = new Handler (Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
+            bundle = msg.getData();
             String parsed_total_restaurant = bundle.getString("stores");
             storeList = stringcutter(parsed_total_restaurant);
 
             //scroll view update
             resultTest = "";
-            for (int i = 0; i < storeCount; i++) {
-                resultTest = resultTest.concat((storeList[i])+ "\n");
+            for (int i = 1; i < storeCount; i++) {
+                resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
-
             test.setText(resultTest);
+
 
         }
     };
 
     public String[] stringcutter(String message) {
-        String[] list = message.split("<span class=\"OXiLu\">", 0);
+        String[] list = message.split("<span class=\"" + storeClass + "\">", 0);
 
 
         String new_list[] = new String[storeCount];
@@ -192,6 +209,48 @@ public class StoreActivity extends AppCompatActivity {
         return new_list;
     }
 
+    public String idcutter(String message) {
+        if (message != null)
+            if (message.length() > 0) {
+                String information = bundle1.getString("id");
+
+                String[] information_split = information.split("/", 0);
+
+                id = information_split[4];
+            }
+        return id;
+    }
+
+    public void updateID(String storeName) {
+        final Document[] doc2 = {null};
+        new Thread() {
+            @Override
+            public void run() {
+                String url_for_id = "https://m.search.naver.com/search.naver?sm=mtp_sly.hst&where=m&query=" + storeName;
+                try {
+                    doc2[0] = Jsoup.connect(url_for_id).get();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Elements elements = doc2[0].select(".place_thumb._2SYdz");
+                String text = elements.attr("href");
+                System.out.println(text);
+                // 쓰레드 간의 데이터 전송을 위한 객체
+                bundle1.putString("id", text);
+                Message msg1 = handler.obtainMessage();
+                msg1.setData(bundle1);
+                handler.sendMessage(msg1);
+            }
+        }.start();
+    }
+
+
+
+
+
+    //tts
     public void tts (){
         // TTS를 생성하고 OnInitListener로 초기화 한다.
         tts = new TextToSpeech(this , new TextToSpeech.OnInitListener() {
@@ -205,15 +264,15 @@ public class StoreActivity extends AppCompatActivity {
         });
     }
 
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
-//        if(tts != null){
-//            tts.stop();
-//            tts.shutdown();
-//            tts = null;
-//        }
-//    }
+    protected void onDestroy() {
+        super.onDestroy();
+        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
+    }
 
 
     //이하STT임
@@ -295,12 +354,69 @@ public class StoreActivity extends AppCompatActivity {
             for(int i = 0; i < matches.size() ; i++){
                 STT_text=STT_text+matches.get(i);
             }
+            STT_text = STT_text.replace(" ","");
             Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
-            if(STT_text != "") {
-                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
-                intent.putExtra("food", STT_text);
+            //select = 식당 번호
+            int select = checkStore(STT_text);
+            if(STT_text.equals("뒤로")){
+                finish();
+            }
+            else if(select == 0) {
+                tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
+            }
+            else{
+               Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                intent.putExtra("store", storeList[select]);
                 startActivity(intent);
             }
+        }
+
+        public int checkStore (String text){
+            int sizeofList = storeList.length;
+            int checkSize=7+1;
+            String [][] checkNum = new String[checkSize][sizeofList];
+            for(int i=1;i<sizeofList;i++){
+                String KoreaNum=transNum(i);
+                checkNum[1][i]=KoreaNum+"번";
+                checkNum[2][i]=KoreaNum+"본";
+                checkNum[3][i]= String.valueOf(i);
+                checkNum[4][i]=checkNum[1][i]+storeList[i];
+                checkNum[5][i]=checkNum[2][i]+storeList[i];
+                checkNum[6][i]=checkNum[3][i]+storeList[i];
+                checkNum[7][i]=storeList[i];
+            }
+            //select는 식당 번호
+            int select=0;
+            //CheckSize는 check의 가지 수
+            for(int i=1;i<sizeofList;i++) {
+                for (int j = 1; j < checkSize; j++) {
+                    if (text.equals(checkNum[j][i])){
+                        select=i;
+                    }
+                }
+            }
+            return select;
+        }
+
+        
+        public String transNum(int num){
+            String[] number = {"", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"};
+            String[] Unit = {"","십"};
+            String result="";  //변환된 값을 저장할 배열
+
+            if(num == 0)
+                return "영";
+            else if(num>=20){
+                result=result+number[(int)(num/10)]+ Unit[1]+number[num%10];
+            }
+            else if(num>=10){
+                result=result+Unit[1]+number[num%10];
+            }
+            else {
+                result = result + number[num % 10];
+            }
+
+            return result;
         }
 
         @Override

@@ -4,12 +4,7 @@ import static android.speech.tts.TextToSpeech.ERROR;
 
 import static java.lang.Thread.sleep;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -17,13 +12,17 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class MainActivity extends AppCompatActivity {
+public class FoodActivity extends AppCompatActivity {
+
     //음성인식 허용(STT)
     SpeechRecognizer mRecognizer;
     final int PERMISSION = 1;
@@ -41,43 +40,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.input_foodname);
 
-        Button howToStartButton = (Button)findViewById(R.id.howToUse);
-        Button startButton = (Button)findViewById(R.id.start);
-        howToStartButton.setOnClickListener(new View.OnClickListener(){
+
+        EditText Medittext = findViewById(R.id.foodname);
+        Button chooseButton = (Button) findViewById(R.id.foodChoose);
+        chooseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);
+                STT_text = Medittext.getText().toString();
+                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                intent.putExtra("food", STT_text);
                 startActivity(intent);
             }
         });
 
 
+
         //이미지 및 TTS 설정
-        lay=findViewById(R.id.activityMain);
-        TTS_text = "시작하시려면 1번, 사용법이 궁금하시면 2번을 말씀해 주세요.";
+        lay=findViewById(R.id.activityFoodname);
+        TTS_text = "드시고 싶은 음식의 종류를 말씀해 주세요.";
         tts();
         // RecognizerIntent 생성
         STT = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         STT.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
         STT.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(MainActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(FoodActivity.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
-        //음성인식 허용
-        // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
-        if(Build.VERSION.SDK_INT >= 23){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO},PERMISSION);
-        }
-
-        startButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FoodActivity.class);
-                startActivity(intent);
-            }
-        });
 
         //이미지 클릭시 TTS,STT설정
         lay.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     public void tts (){
@@ -202,18 +189,18 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> matches =
                     results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
-            for (int i = 0; i < matches.size(); i++) {
-                STT_text = STT_text + matches.get(i);
+            for(int i = 0; i < matches.size() ; i++){
+                STT_text=STT_text+matches.get(i);
             }
-                Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
-                if (STT_text.equals("일") || STT_text.equals("일본") || STT_text.equals("1번") || STT_text.equals("1") || STT_text.equals("일번")) {
-                    Intent intent = new Intent(getApplicationContext(), FoodActivity.class);
-                    startActivity(intent);
-                } else if (STT_text.equals("이") || STT_text.equals("이본") || STT_text.equals("2번") || STT_text.equals("2") || STT_text.equals("이번")) {
-                    Intent intent = new Intent(getApplicationContext(), IntroductionActivity.class);
-                    startActivity(intent);
-                }
-
+            Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
+            if(STT_text.equals("뒤로")){
+                finish();
+            }
+            else if(STT_text != "") {
+                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
+                intent.putExtra("food", STT_text);
+                startActivity(intent);
+            }
         }
 
         @Override

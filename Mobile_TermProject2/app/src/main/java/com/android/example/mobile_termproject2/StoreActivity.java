@@ -212,15 +212,15 @@ public class StoreActivity extends AppCompatActivity {
         });
     }
 
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
-//        if(tts != null){
-//            tts.stop();
-//            tts.shutdown();
-//            tts = null;
-//        }
-//    }
+    protected void onDestroy() {
+        super.onDestroy();
+        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+        if(tts != null){
+            tts.stop();
+            tts.shutdown();
+            tts = null;
+        }
+    }
 
 
     //이하STT임
@@ -306,7 +306,10 @@ public class StoreActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
             //select = 식당 번호
             int select = checkStore(STT_text);
-            if(select == 0) {
+            if(STT_text.equals("뒤로")){
+                finish();
+            }
+            else if(select == 0) {
                 tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
             }
             else{

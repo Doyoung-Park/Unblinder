@@ -305,6 +305,9 @@ public class MenuActivity extends AppCompatActivity {
                 STT_text = STT_text + matches.get(i);
             }
             Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
+            if(STT_text.equals("뒤로")){
+                finish();
+            }
         }
 
         @Override

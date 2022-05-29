@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:id="@+id/howToUse"
     tools:context=".MainActivity">
 
     <HorizontalScrollView
@@ -27,11 +28,11 @@
             android:baselineAligned="false"
             android:orientation="vertical">
 
-            <MultiAutoCompleteTextView
-                android:id="@+id/multiAutoCompleteTextView"
+            <TextView
+                android:id="@+id/textViewPlan"
                 android:layout_width="374dp"
                 android:layout_height="match_parent"
-                android:text="사용법은 다음과 같다 \n1. 처음 터치시 음성이 출력됩니다.\n2. 두번째 터치 후 말씀 하시면 됩니다.\n3. 다시 듣고 싶으시면 한번 더 터치하시면 됩니다."
+                android:text="사용법은 다음과 같습니다. \n1. 처음 터치시 음성이 출력됩니다.\n2. 두번째 터치 후 말씀 하시면 됩니다.\n3. 다시 듣고 싶으시면 한번 더 터치하시면 됩니다.\n4. 어디서든 뒤로 이동하고 싶으시면 뒤로 라고 말씀해 주시면 됩니다."
                 android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>

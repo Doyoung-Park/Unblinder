@@ -32,11 +32,11 @@ import java.util.Locale;
 public class StoreActivity extends AppCompatActivity {
 
     // 크롤링용 변수
-    String keyword = "null";
+    String foodName = "null";
     String id = "";
     private String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
     private Document doc = null;
-    private String storeClass = getString(R.string.storeHTMLClassName);
+    private String storeClass = "OXiLu";
     private String totalStores = "";
     private int storeCount = 0;
 
@@ -78,21 +78,53 @@ public class StoreActivity extends AppCompatActivity {
         test = findViewById(R.id.test);
 
         //메뉴 받기
-        keyword= getIntent().getStringExtra("food");
+        foodName= getIntent().getStringExtra("food");
 
         editText = findViewById(R.id.inputStoreName);
-        editText.setText(keyword);
 
 
-        Button btnBack = (Button) findViewById(R.id.btnPrev);
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        //keyword = editText.getText().toString();
+
+        new Thread() {
+            @Override
+
+            public void run() {
+                Document doc = null;
+
+
+                try {
+                    totalStores = "";
+
+                    String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + foodName + " 배달";
+                    doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
+                    Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
+
+                    storeCount = elements_name.size();
+                    for (int i = 0; i < elements_name.size(); i++) {
+                        totalStores = totalStores.concat(elements_name.get(i).toString());
+                    }
+                    bundle1.putString("stores", totalStores); // (key값, value값) 메뉴 이름
+                    // 쓰레드 간의 데이터 전송을 위한 객체
+                    Message msg1 = handler.obtainMessage();
+                    msg1.setData(bundle1);
+                    handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }.start();
+
+
+
+        Button btnPrev= (Button)findViewById(R.id.btnPrev);
+        btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+
             }
         });
-
-
 
 
             Button btnToMenu = (Button)findViewById(R.id.btnToMenu);
@@ -120,7 +152,7 @@ public class StoreActivity extends AppCompatActivity {
         lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TTS_text = "선택하신 메뉴 "+keyword+"에 대한 검색 결과 입니다.\n"+resultTest;
+                TTS_text = "선택하신 메뉴 "+foodName+"에 대한 검색 결과 입니다.\n"+resultTest;
                 if(check ==0) {
                     //TTS
                     mRecognizer.cancel();

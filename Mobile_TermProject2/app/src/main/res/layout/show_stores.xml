@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:text="선택"
+        android:text="식당이름"
         app:layout_constraintEnd_toEndOf="parent" />
 
         <Button

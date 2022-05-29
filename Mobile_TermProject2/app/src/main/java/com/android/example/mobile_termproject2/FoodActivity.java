@@ -12,6 +12,7 @@ import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,10 +42,13 @@ public class FoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_foodname);
 
+
+        EditText Medittext = findViewById(R.id.foodname);
         Button chooseButton = (Button) findViewById(R.id.foodChoose);
         chooseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                STT_text = Medittext.getText().toString();
                 Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
                 intent.putExtra("food", STT_text);
                 startActivity(intent);

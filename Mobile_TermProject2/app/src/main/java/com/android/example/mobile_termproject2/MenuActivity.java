@@ -37,6 +37,8 @@ import java.util.Set;
 
 public class MenuActivity extends AppCompatActivity {
     // 메뉴용 변수들
+    String id = "";
+
     String url_for_menu = "https://m.store.naver.com/restaurants/35255743/tabs/menus/baemin/list"; // 도원참치 판교점 메뉴용
     String msg_name;                    // 매뉴 이름을 저장할 변수
 
@@ -65,10 +67,13 @@ public class MenuActivity extends AppCompatActivity {
     View lay;
     int check = 0;
 
+    Bundle bundle = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
+
 
         // 전화 버튼 누르면 해당 가게 전화번호로 전화 걺. (다이얼에 전화번호 입력)
         Button call = (Button) findViewById(R.id.call);

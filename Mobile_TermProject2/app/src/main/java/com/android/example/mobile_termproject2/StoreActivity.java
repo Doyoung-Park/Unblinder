@@ -130,7 +130,14 @@ public class StoreActivity extends AppCompatActivity {
             btnToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String storeNameKeyword = editText.getText().toString();
+
+                    updateID(storeNameKeyword);
+                    id = idcutter(bundle1.getString("id"));
+
+
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    intent.putExtra("id", id);
                     startActivity(intent);
                 }
             });
@@ -182,6 +189,8 @@ public class StoreActivity extends AppCompatActivity {
                 resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
             test.setText(resultTest);
+
+
         }
     };
 
@@ -199,6 +208,49 @@ public class StoreActivity extends AppCompatActivity {
         return new_list;
     }
 
+    public String idcutter(String message) {
+        if (message != null)
+            if (message.length() > 0) {
+                String information = bundle1.getString("id");
+
+                String[] information_split = information.split("/", 0);
+
+                id = information_split[4];
+            }
+        return id;
+    }
+
+    public void updateID(String storeName) {
+        Document doc2 = null;
+        new Thread() {
+            @Override
+            public void run() {
+                String url_for_id = "https://m.search.naver.com/search.naver?sm=mtp_sly.hst&where=m&query=" + storeName;
+                try {
+                    doc2 = Jsoup.connect(url_for_id).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                Elements elements = doc2.select(".place_thumb._2SYdz");
+                String text = elements.attr("href");
+                // id 없는 href 관련 https://myitis5212.tistory.com/39
+                System.out.println(text);
+                // 쓰레드 간의 데이터 전송을 위한 객체
+                bundle1.putString("id", text);
+                Message msg1 = handler.obtainMessage();
+                msg1.setData(bundle1);
+                handler.sendMessage(msg1);
+            }
+        }.start();
+    }
+
+
+
+
+
+    //tts
     public void tts (){
         // TTS를 생성하고 OnInitListener로 초기화 한다.
         tts = new TextToSpeech(this , new TextToSpeech.OnInitListener() {

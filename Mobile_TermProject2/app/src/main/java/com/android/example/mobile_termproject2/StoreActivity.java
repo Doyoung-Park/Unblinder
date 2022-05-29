@@ -67,6 +67,7 @@ public class StoreActivity extends AppCompatActivity {
 
     TextView test;
     EditText editText;
+    String storeNameKeyword;
 
 
     @Override
@@ -130,7 +131,7 @@ public class StoreActivity extends AppCompatActivity {
             btnToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String storeNameKeyword = editText.getText().toString();
+                    storeNameKeyword = editText.getText().toString();
 
                     updateID(storeNameKeyword);
                     id = idcutter(bundle1.getString("id"));

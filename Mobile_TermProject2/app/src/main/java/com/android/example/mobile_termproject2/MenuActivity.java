@@ -74,7 +74,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
 
-        id = getIntent().getStringExtra("id");
+        while(id == "") id = getIntent().getStringExtra("id");
 
         System.out.println(id);
         url_for_menu = "https://m.store.naver.com/restaurants/" + id + "/tabs/menus/baemin/list";

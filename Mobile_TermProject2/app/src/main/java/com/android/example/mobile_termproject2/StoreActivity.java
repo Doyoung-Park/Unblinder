@@ -60,7 +60,6 @@ public class StoreActivity extends AppCompatActivity {
     //TTS
     public TextToSpeech tts;
     String TTS_text;
-    int sizeofList =0;
 
     //additional
     View lay;
@@ -182,7 +181,6 @@ public class StoreActivity extends AppCompatActivity {
             for (int i = 1; i < storeCount; i++) {
                 resultTest = resultTest.concat((i+". "+storeList[i])+ "\n");
             }
-
             test.setText(resultTest);
         }
     };
@@ -304,12 +302,66 @@ public class StoreActivity extends AppCompatActivity {
             for(int i = 0; i < matches.size() ; i++){
                 STT_text=STT_text+matches.get(i);
             }
+            STT_text = STT_text.replace(" ","");
             Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
-            if(STT_text != "") {
-                Intent intent = new Intent(getApplicationContext(), StoreActivity.class);
-                intent.putExtra("food", STT_text);
+            //select = 식당 번호
+            int select = checkStore(STT_text);
+            if(select == 0) {
+                tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
+            }
+            else{
+               Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                intent.putExtra("store", storeList[select]);
                 startActivity(intent);
             }
+        }
+
+        public int checkStore (String text){
+            int sizeofList = storeList.length;
+            int checkSize=7+1;
+            String [][] checkNum = new String[checkSize][sizeofList];
+            for(int i=1;i<sizeofList;i++){
+                String KoreaNum=transNum(i);
+                checkNum[1][i]=KoreaNum+"번";
+                checkNum[2][i]=KoreaNum+"본";
+                checkNum[3][i]= String.valueOf(i);
+                checkNum[4][i]=checkNum[1][i]+storeList[i];
+                checkNum[5][i]=checkNum[2][i]+storeList[i];
+                checkNum[6][i]=checkNum[3][i]+storeList[i];
+                checkNum[7][i]=storeList[i];
+            }
+            //select는 식당 번호
+            int select=0;
+            //CheckSize는 check의 가지 수
+            for(int i=1;i<sizeofList;i++) {
+                for (int j = 1; j < checkSize; j++) {
+                    if (text.equals(checkNum[j][i])){
+                        select=i;
+                    }
+                }
+            }
+            return select;
+        }
+
+        
+        public String transNum(int num){
+            String[] number = {"", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"};
+            String[] Unit = {"","십"};
+            String result="";  //변환된 값을 저장할 배열
+
+            if(num == 0)
+                return "영";
+            else if(num>=20){
+                result=result+number[(int)(num/10)]+ Unit[1]+number[num%10];
+            }
+            else if(num>=10){
+                result=result+Unit[1]+number[num%10];
+            }
+            else {
+                result = result + number[num % 10];
+            }
+
+            return result;
         }
 
         @Override

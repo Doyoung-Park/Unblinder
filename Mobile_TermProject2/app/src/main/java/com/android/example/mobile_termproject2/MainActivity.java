@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Button howToStartButton = (Button)findViewById(R.id.howToUse);
         Button startButton = (Button)findViewById(R.id.start);
         howToStartButton.setOnClickListener(new View.OnClickListener(){

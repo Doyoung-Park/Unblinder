@@ -26,9 +26,13 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 
 public class MenuActivity extends AppCompatActivity {
@@ -36,13 +40,14 @@ public class MenuActivity extends AppCompatActivity {
     String url_for_menu = "https://m.store.naver.com/restaurants/35255743/tabs/menus/baemin/list"; // 도원참치 판교점 메뉴용
     String msg_name;                    // 매뉴 이름을 저장할 변수
 
+    TextView textView; // 메뉴를 띄워줄 텍스트뷰
+
     ArrayList<String> menu_category = new ArrayList<String>(); // 메뉴 카테고리를 담을 어레이 리스트
     ArrayList<String> menu_name = new ArrayList<String>(); // 메뉴 이름을 담을 어레이 리스트
     ArrayList<String> menu_price = new ArrayList<String>(); // 메뉴 가격을 담을 어레이 리스트
     Map<String, String> menuAndPrice = new LinkedHashMap<>(); // 위 두 리스트를 활용해서 채울 해쉬맵. 아래 해쉬맵에 이용
+    ArrayList<Map<String, String>> wholeMenu = new ArrayList<>();
     Map<String, Map<String, String>> whole_menu = new LinkedHashMap<>(); //카테고리, <메뉴이름, 가격>을 담을 해쉬맵
-
-    TextView textView; // layout에 띄워주기 위함 텍스트뷰
 
 
     //음성인식 허용(STT)
@@ -100,21 +105,21 @@ public class MenuActivity extends AppCompatActivity {
                     */
                     menu_category.add(main_menu.text().substring(0, main_menu.text().indexOf(" "))); // 메뉴카테고리 어레이리스트의 첫번째 키값에 추가 됨
 
-                    // 이번에는 대표메뉴 제외한 카테고리들 가져오기
-                    doc = Jsoup.connect(url_for_menu).get();
-                    Elements elseCategory = doc.select(".list_tit.active");
-                    String[] arrayForCategory = elseCategory.text().split(" ");
-                    for (int i = 0; i < elseCategory.size(); i++) {
-                        menu_category.add(arrayForCategory[i]);
-                    }
+//                    // 이번에는 대표메뉴 제외한 카테고리들 가져오기
+//                    doc = Jsoup.connect(url_for_menu).get();
+//                    Elements elseCategory = doc.select("..list_tit");
+//                    String[] arrayForCategory = elseCategory.text().split(" ");
+//                    for (int i = 0; i < elseCategory.size(); i++) {
+//                        menu_category.add(arrayForCategory[i]);
+//                    }
 
                     doc = Jsoup.connect(url_for_menu).get();
-                    Elements abc = doc.select(".list_item.type_d_menu");
+                    Elements daepyo = doc.select(".list_item.type_d_menu");
 
                     // 메뉴 이름들 가져오기
                     doc = Jsoup.connect(url_for_menu).get(); // 이 주소의 html코드를 싹 가져오겠다
                     Elements menuName_list = doc.getElementsByAttributeValue("class", "name"); // 클래스 네임 "name"(메뉴 이름)인 값을 가져오겠다
-                    for (int i = 0; i < menuName_list.size(); i++) {
+                    for (int i = 0; i < daepyo.size(); i++) {
                         menu_name.add(menuName_list.get(i).text());
                     }
 
@@ -122,9 +127,10 @@ public class MenuActivity extends AppCompatActivity {
                     doc = Jsoup.connect(url_for_menu).get(); // 이 주소의 html코드를 싹 가져오겠다
                     Elements menuPrice_list = doc.select(".price");
                     String[] arrayForPrice = menuPrice_list.text().split(" ");
-                    for (int i = 0; i < menuPrice_list.size(); i++) {
+                    for (int i = 0; i < daepyo.size(); i++) {
                         menu_price.add(arrayForPrice[i]);
                     }
+
 
                     // 이제 메뉴이름-가격 해쉬맵에 추가하기
                     for (int i = 0; i < menu_price.size(); i++) {
@@ -147,7 +153,6 @@ public class MenuActivity extends AppCompatActivity {
                 }
             }
         }.start();
-
 
 
         // RecognizerIntent 생성
@@ -192,10 +197,36 @@ public class MenuActivity extends AppCompatActivity {
 
             recievedMenu = (Map<String, Map<String, String>>) bundle.getSerializable("menu"); // key가 menu 데이터의 value값 가져와라, 이런식으로 View를 메인 쓰레드에 뿌려줘야함
 
-            for (Map.Entry<String,  Map<String, String>> entrySet : recievedMenu.entrySet()) {
-                textView.setText(entrySet.getKey() + " : " + entrySet.getValue());
-            }
-            // textView.setText("가쟈왔습니다");
+            String category_name = recievedMenu.keySet().toString();
+            // 카테고리 이름 획득. 식당별로 대표메뉴인 곳도, 신메뉴인 곳도 있음
+            category_name = category_name.substring(1, category_name.indexOf(']'));
+
+            String menuAndPrice = recievedMenu.get(category_name).toString();
+            StringBuilder builder = new StringBuilder(menuAndPrice);
+            menuAndPrice.replaceAll("\\{", "");
+            menuAndPrice.replaceAll("\\}", ""); // 시작과 끝에 붙은 {와 } 제거
+
+            // ", "를 \n으로 바꿔서 한줄당 메뉴하나씩 나오게 출력
+            textView.setText(category_name + "\n" + menuAndPrice.replaceAll(", ", "\n"));
+
+
+//            String keys = recievedMenu.keySet().toString();
+//            keys = keys.substring(1, keys.indexOf(']'));
+//            String[] strKeys = keys.split(", "); // strkeys에 번들로 전달받은 해쉬맵의 키값들이 들어가 있음. 이값들이 메뉴 카테고리 값들
+//            for (int i = 0; i < strKeys.length; i++) {
+//
+//            }
+//            for (Map.Entry<String, String> entrySet : recievedMenu.get.entrySet()) {
+//                textView.setText(entrySet.getKey() + " : " + entrySet.getValue());
+//            }
+
+//            Set<String> keySet = recievedMenu.keySet();
+//            int count = 0;
+//            for (String key : keySet) { // 이 반복문은 번들로 받은 해쉬맵을 키값별로 따로 스트링에 저장하는 반목문
+//                menuPrice[count] = key + "\n" + recievedMenu.get(key);
+//                count++;
+//            }
+
         }
     };
 

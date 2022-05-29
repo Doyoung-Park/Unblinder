@@ -85,7 +85,7 @@ public class StoreActivity extends AppCompatActivity {
         btnSelectStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyword = editText.getText().toString();
+
 
                 new Thread() {
                     @Override
@@ -93,10 +93,12 @@ public class StoreActivity extends AppCompatActivity {
                     public void run() {
                         Document doc = null;
 
+
                         try {
-                            String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword;
+                            keyword = editText.getText().toString();
+                            String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + keyword + " 배달";
                             doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
-                            Elements elements_name = doc.getElementsByAttributeValue("class", "OXiLu");
+                            Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
 
                             storeCount = elements_name.size();
                             for (int i = 0; i < elements_name.size(); i++) {
@@ -179,7 +181,7 @@ public class StoreActivity extends AppCompatActivity {
     };
 
     public String[] stringcutter(String message) {
-        String[] list = message.split("<span class=\"OXiLu\">", 0);
+        String[] list = message.split("<span class=\"" + storeClass + "\">", 0);
 
 
         String new_list[] = new String[storeCount];

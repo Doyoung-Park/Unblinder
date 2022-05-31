@@ -94,7 +94,6 @@ public class StoreActivity extends AppCompatActivity {
 
                 try {
                     totalStores = "";
-
                     String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + foodName + " 배달";
                     doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
                     Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
@@ -107,6 +106,7 @@ public class StoreActivity extends AppCompatActivity {
                     // 쓰레드 간의 데이터 전송을 위한 객체
                     Message msg1 = handler.obtainMessage();
                     msg1.setData(bundle1);
+
                     handler.sendMessage(msg1); //메뉴 이름 먼저 보내고~
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -366,7 +366,9 @@ public class StoreActivity extends AppCompatActivity {
             else{
                 updateID(storeList[select]);
                 id = idcutter(bundle1.getString("id"));
-               Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                Toast.makeText(getApplicationContext() , id, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                 intent.putExtra("store", storeList[select]);
                 intent.putExtra("id", id);
                 startActivity(intent);
@@ -375,7 +377,7 @@ public class StoreActivity extends AppCompatActivity {
 
         public int checkStore (String text){
             int sizeofList = storeList.length;
-            int checkSize=7+1;
+            int checkSize=9+1;
             String [][] checkNum = new String[checkSize][sizeofList];
             for(int i=1;i<sizeofList;i++){
                 String KoreaNum=transNum(i);
@@ -386,6 +388,8 @@ public class StoreActivity extends AppCompatActivity {
                 checkNum[5][i]=checkNum[2][i]+storeList[i];
                 checkNum[6][i]=checkNum[3][i]+storeList[i];
                 checkNum[7][i]=storeList[i];
+                checkNum[8][i]= String.valueOf(i)+"번";
+                checkNum[9][i]= String.valueOf(i)+"본";
             }
             //select는 식당 번호
             int select=0;

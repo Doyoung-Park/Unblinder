@@ -65,7 +65,9 @@ public class MenuActivity extends AppCompatActivity {
 
     //TTS
     public TextToSpeech tts;
-    String TTS_text;
+    String TTS_text="";
+    //메뉴 이름, 가격 리스트[][0]=메뉴 이름,[][1]=가격
+    private String[][] MenuList= null;
 
     //additional
     View lay;
@@ -80,6 +82,7 @@ public class MenuActivity extends AppCompatActivity {
 
         id = getIntent().getStringExtra("id");
         StoreName = getIntent().getStringExtra("food");
+
 
 
         System.out.println(id);
@@ -327,7 +330,9 @@ public class MenuActivity extends AppCompatActivity {
 
         //이미지 및 TTS 설정
         lay = findViewById(R.id.activityMenus);
-        TTS_text = "메뉴는 다음과 같습니다.";
+        TTS_text="전화 연결을 원하시면 전화 또는 전화 걸기라고 말씀해 주세요.";
+        TTS_text=TTS_text+"선택하신 식당 "+StoreName+"에 대한 메뉴 결과 입니다.";
+        TTS_text = TTS_text+ "메뉴는 다음과 같습니다.";
         //
         tts();
 
@@ -372,6 +377,7 @@ public class MenuActivity extends AppCompatActivity {
 
                 // ", "를 \n으로 바꿔서 한줄당 메뉴하나씩 나오게 출력
                 textView.setText(category_name + "\n" + menuAndPrice.replaceAll(", ", "\n"));
+                TTS_text=TTS_text+category_name + "\n" + menuAndPrice.replaceAll(", ", "\n");
             } else if (type == 2) {
                 Bundle bundle = msg.getData();
                 Map<String, String> recievedMenu = new LinkedHashMap<>(); //카테고리, <메뉴이름, 가격>을 담을 해쉬맵
@@ -383,18 +389,19 @@ public class MenuActivity extends AppCompatActivity {
                 StringBuilder builder = new StringBuilder(menuAndPrice);
                 menuAndPrice.replaceAll("\\{", "");
                 menuAndPrice.replaceAll("\\}", ""); // 시작과 끝에 붙은 {와 } 제거
-
                 for (Map.Entry<String, String> entrySet : recievedMenu.entrySet()) {
                     menuAndPrice = menuAndPrice + entrySet.getKey() + "=" + entrySet.getValue() + "\n";
-
                 }
 
                 // ", "를 \n으로 바꿔서 한줄당 메뉴하나씩 나오게 출력
                 textView.setText(menuAndPrice);
+                TTS_text=TTS_text+menuAndPrice;
             } else {
                 Bundle bundle = msg.getData();
                 textView.setText(bundle.getString("menu")); // key가 temperature인 데이터의 value값 가져와라, 이런식으로 View를 메인 쓰레드에서 뿌려줘야함
+                TTS_text=TTS_text+bundle.getString("menu");
             }
+
 
 
 //            String keys = recievedMenu.keySet().toString();
@@ -522,11 +529,23 @@ public class MenuActivity extends AppCompatActivity {
             for (int i = 0; i < matches.size(); i++) {
                 STT_text = STT_text + matches.get(i);
             }
-            Toast.makeText(getApplicationContext(), STT_text, Toast.LENGTH_SHORT).show();
-            if (STT_text.equals("뒤로")) {
+            STT_text = STT_text.replace(" ","");
+            Toast.makeText(getApplicationContext() , STT_text, Toast.LENGTH_SHORT).show();
+            //select = 식당 번호
+            if(STT_text.equals("뒤로")){
                 finish();
             }
+            else if(STT_text.equals("전화")||STT_text.equals("전화걸기")) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(num));
+                startActivity(intent);
+            }
+            else{
+                tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
+            }
         }
+
 
         @Override
         public void onPartialResults(Bundle partialResults) {

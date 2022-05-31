@@ -81,7 +81,10 @@ public class StoreActivity extends AppCompatActivity {
         foodName= getIntent().getStringExtra("food");
         editText = findViewById(R.id.inputStoreName);
 
+        //keyword = editText.getText().toString();
         updateStore();
+
+
 
         Button btnPrev= (Button)findViewById(R.id.btnPrev);
         btnPrev.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +101,7 @@ public class StoreActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     storeNameKeyword = editText.getText().toString();
+                    id = idList[getStoreIndex(storeNameKeyword)];
 
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                     intent.putExtra("id", id);
@@ -151,17 +155,26 @@ public class StoreActivity extends AppCompatActivity {
                     doc = Jsoup.connect(url).get(); // 이 주소의 html코드를 싹 가져오겠다
                     Elements elements_name = doc.getElementsByAttributeValue("class", storeClass);
 
-                    String eachStore = null;
+
 
                     storeCount = elements_name.size();
                     for (int i = 0; i < elements_name.size(); i++) {
+                        //initalize
+                        String eachStore = "";
+                        String eachId = "";
+
                         eachStore = elements_name.get(i).toString();
+                        if (eachStore.equals("")) continue;
+
                         eachStore = storeCutter(eachStore);
 
                         String url_id = "https://m.search.naver.com/search.naver?sm=mtp_sly.hst&where=m&query=" + eachStore;
                         doc = Jsoup.connect(url_id).get();
                         Elements elements_id = doc.select(".place_thumb._2SYdz");
-                        String eachId = elements_id.attr("href");
+                        eachId = elements_id.attr("href");
+
+                        if (eachId.equals("")) continue;
+
                         eachId = idCutter(eachId);
 
                         totalStores = totalStores.concat(eachStore + "/");
@@ -175,7 +188,7 @@ public class StoreActivity extends AppCompatActivity {
                     Message msg_id = handler_id.obtainMessage();
                     msg_store.setData(bundleStoreName);
                     msg_id.setData(bundleID);
-                    handler_store.sendMessage(msg_store); //메뉴 이름 먼저 보내고~
+                    handler_store.sendMessage(msg_store);
                     handler_id.sendMessage(msg_id);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -188,8 +201,15 @@ public class StoreActivity extends AppCompatActivity {
     Handler handler_store = new Handler (Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            String result = bundleStoreName.getString("stores");
-            storeList = result.split("/");
+            String msgStores = bundleStoreName.getString("stores");
+            String storeListText = "";
+            storeList = msgStores.split("/");
+
+            //test 화면에 출력
+            for (int i = 0; i < storeList.length; i++) {
+                storeListText = storeListText.concat(Integer.toString(i + 1)).concat(" " + storeList[i] + "\n");
+            }
+            test.setText(storeListText);
         }
     };
 
@@ -219,6 +239,16 @@ public class StoreActivity extends AppCompatActivity {
         id = cutter[0];
 
         return id;
+    }
+
+    private int getStoreIndex (String storeNameKeyword) {
+        int index = 0;
+        for (int i = 0; i < storeList.length; i++) {
+            if (storeNameKeyword.equals(storeList[i])) {
+                return index;
+            }
+        }
+        return index;
     }
 
     //tts
@@ -336,7 +366,7 @@ public class StoreActivity extends AppCompatActivity {
                 tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
             }
             else{
-                //
+
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                 intent.putExtra("store", storeList[select]);
                 intent.putExtra("id", id);
@@ -346,7 +376,7 @@ public class StoreActivity extends AppCompatActivity {
 
         public int checkStore (String text){
             int sizeofList = storeList.length;
-            int checkSize=7+1;
+            int checkSize=9+1;
             String [][] checkNum = new String[checkSize][sizeofList];
             for(int i=1;i<sizeofList;i++){
                 String KoreaNum=transNum(i);
@@ -357,6 +387,8 @@ public class StoreActivity extends AppCompatActivity {
                 checkNum[5][i]=checkNum[2][i]+storeList[i];
                 checkNum[6][i]=checkNum[3][i]+storeList[i];
                 checkNum[7][i]=storeList[i];
+                checkNum[8][i]= String.valueOf(i)+"번";
+                checkNum[9][i]= String.valueOf(i)+"본";
             }
             //select는 식당 번호
             int select=0;

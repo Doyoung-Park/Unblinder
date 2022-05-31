@@ -80,6 +80,15 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
 
+        // initialize 먼저하고
+
+        menu_category = new ArrayList<String>(); // 메뉴 카테고리를 담을 어레이 리스트
+        menu_name = new ArrayList<String>(); // 메뉴 이름을 담을 어레이 리스트
+        menu_price = new ArrayList<String>(); // 메뉴 가격을 담을 어레이 리스트
+        menuAndPrice = new LinkedHashMap<>(); // 위 두 리스트를 활용해서 채울 해쉬맵. 아래 해쉬맵에 이용
+        wholeMenu = new ArrayList<>();
+       whole_menu = new LinkedHashMap<>(); //카테고리, <메뉴이름, 가격>을 담을 해쉬맵
+
         id = getIntent().getStringExtra("id");
         StoreName = getIntent().getStringExtra("food");
 
@@ -314,7 +323,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_DIAL);
+                intent.setAction(Intent.ACTION_CALL);
                 intent.setData(Uri.parse(num));
 
                 startActivity(intent);

@@ -83,7 +83,6 @@ public class MenuActivity extends AppCompatActivity {
 
 
         System.out.println(id);
-        id = "1038517129";
         url_for_menu = "https://m.store.naver.com/restaurants/" + id; // 메뉴용 url
         url_for_phone = "https://m.place.naver.com/restaurant/" + id + "/home"; // 전화번호용 url
 

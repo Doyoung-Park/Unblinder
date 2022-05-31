@@ -18,10 +18,10 @@
         tools:layout_editor_absoluteY="44dp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/storeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="식당 이름: 짬뽕 지존"
+        android:text="loading"
         android:textColor="@color/white"
         android:textSize="20dp"
         tools:layout_editor_absoluteX="40dp"
@@ -37,7 +37,7 @@
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/storeName"
         tools:layout_editor_absoluteX="40dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

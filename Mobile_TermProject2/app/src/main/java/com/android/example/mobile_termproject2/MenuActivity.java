@@ -38,13 +38,14 @@ import java.util.Set;
 public class MenuActivity extends AppCompatActivity {
     // 메뉴용 변수들
     String id = "";
-    String StoreName = "";
+    String storeName = "";
 
     String url_for_menu = null; // 메뉴용 url
     String url_for_phone = null; // 전화번호용 url
     String num = null; // 쓰레드에서 핸들러에 안넘기고 바로 전역변수에 저장 시키기
 
     TextView textView; // 메뉴를 띄워줄 텍스트뷰
+    TextView textViewstoreName;
 
     int type = -1;
 
@@ -80,28 +81,18 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_menus);
 
+
+
         // initialize 먼저하고
-
-        menu_category = new ArrayList<String>(); // 메뉴 카테고리를 담을 어레이 리스트
-        menu_name = new ArrayList<String>(); // 메뉴 이름을 담을 어레이 리스트
-        menu_price = new ArrayList<String>(); // 메뉴 가격을 담을 어레이 리스트
-        menuAndPrice = new LinkedHashMap<>(); // 위 두 리스트를 활용해서 채울 해쉬맵. 아래 해쉬맵에 이용
-        wholeMenu = new ArrayList<>();
-       whole_menu = new LinkedHashMap<>(); //카테고리, <메뉴이름, 가격>을 담을 해쉬맵
-
         id = getIntent().getStringExtra("id");
-        StoreName = getIntent().getStringExtra("food");
-
-
+        storeName = getIntent().getStringExtra("storeName");
 
         System.out.println(id);
         url_for_menu = "https://m.store.naver.com/restaurants/" + id; // 메뉴용 url
         url_for_phone = "https://m.place.naver.com/restaurant/" + id + "/home"; // 전화번호용 url
 
-
-        //mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-        //메뉴를 string list로 받아오기
-
+        textViewstoreName = (TextView) findViewById(R.id.storeName);
+        textViewstoreName.setText(storeName);
         textView = (TextView) findViewById(R.id.textView); // TextView textView = ~~ 식으로 하면 앱이 계속 꺼짐 ㄷㄷ
         final Bundle bundle = new Bundle(); // 메뉴 이름 스트링 전달용 번들
 
@@ -340,7 +331,7 @@ public class MenuActivity extends AppCompatActivity {
         //이미지 및 TTS 설정
         lay = findViewById(R.id.activityMenus);
         TTS_text="전화 연결을 원하시면 전화 또는 전화 걸기라고 말씀해 주세요.";
-        TTS_text=TTS_text+"선택하신 식당 "+StoreName+"에 대한 메뉴 결과 입니다.";
+        TTS_text=TTS_text+"선택하신 식당 "+storeName+"에 대한 메뉴 결과 입니다.";
         TTS_text = TTS_text+ "메뉴는 다음과 같습니다.";
         //
         tts();

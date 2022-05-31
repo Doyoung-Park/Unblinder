@@ -26,7 +26,9 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class StoreActivity extends AppCompatActivity {
@@ -44,6 +46,8 @@ public class StoreActivity extends AppCompatActivity {
     //식당
     private String[] storeList= null;
     private String[] idList = null;
+    Map<String, String> storeAndId = new LinkedHashMap<>();
+
     //test용
     String resultTest;
     Bundle bundleStoreName = new Bundle();
@@ -95,16 +99,16 @@ public class StoreActivity extends AppCompatActivity {
             }
         });
 
-
             Button btnToMenu = (Button)findViewById(R.id.btnToMenu);
             btnToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     storeNameKeyword = editText.getText().toString();
-                    id = idList[getStoreIndex(storeNameKeyword)];
+                    id = storeAndId.get(storeNameKeyword);
 
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                     intent.putExtra("id", id);
+                    intent.putExtra("storeName", storeNameKeyword);
                     startActivity(intent);
                 }
             });
@@ -177,6 +181,8 @@ public class StoreActivity extends AppCompatActivity {
 
                         eachId = idCutter(eachId);
 
+                        storeAndId.put(eachStore, eachId);
+
                         totalStores = totalStores.concat(eachStore + "/");
                         totalids = totalids.concat(eachId + "/");
                     }
@@ -241,15 +247,6 @@ public class StoreActivity extends AppCompatActivity {
         return id;
     }
 
-    private int getStoreIndex (String storeNameKeyword) {
-        int index = 0;
-        for (int i = 0; i < storeList.length; i++) {
-            if (storeNameKeyword.equals(storeList[i])) {
-                return index;
-            }
-        }
-        return index;
-    }
 
     //tts
     public void tts (){

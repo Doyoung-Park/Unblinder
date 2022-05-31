@@ -18,26 +18,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="57dp" />
 
+
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/storeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="식당 이름:"
+        android:text="loading"
         android:textColor="#15133C"
         android:textSize="20dp"
         tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="65dp" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="0000"
-        android:textColor="#15133C"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/call"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        tools:layout_editor_absoluteY="65dp" />
+        tools:layout_editor_absoluteY="65dp"  />
 
     <TextView
         android:id="@+id/textView5"
@@ -49,7 +39,7 @@
         android:textColor="#15133C"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/storeName"
         tools:layout_editor_absoluteX="40dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

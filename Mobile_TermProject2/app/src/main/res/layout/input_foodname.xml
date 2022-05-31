@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:hint="food name"
+            android:textColor="#15133C"
             android:visibility="visible" />
     </com.google.android.material.textfield.TextInputLayout>
 

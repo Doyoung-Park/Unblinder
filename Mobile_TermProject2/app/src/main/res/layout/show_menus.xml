@@ -65,8 +65,8 @@
             android:text="잠시만 기다려주세요..."
             android:textColor="#15133C"
             android:textSize="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintStart_toStartOf="parent"/>
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView5" />-->
 
 
 <!--        <TextView-->

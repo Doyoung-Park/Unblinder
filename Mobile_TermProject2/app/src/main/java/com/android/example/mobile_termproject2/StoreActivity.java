@@ -365,11 +365,13 @@ public class StoreActivity extends AppCompatActivity {
             else{
 
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                id = storeAndId.get(storeList[select]);
                 intent.putExtra("store", storeList[select]);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
         }
+
 
         public int checkStore (String text){
             int sizeofList = storeList.length;

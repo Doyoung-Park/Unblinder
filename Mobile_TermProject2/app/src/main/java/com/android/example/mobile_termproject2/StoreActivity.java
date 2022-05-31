@@ -84,7 +84,7 @@ public class StoreActivity extends AppCompatActivity {
         //메뉴 받기
         foodName= getIntent().getStringExtra("food");
         editText = findViewById(R.id.inputStoreName);
-
+        resultTest="잠시만 기다려주세요.";
         //keyword = editText.getText().toString();
         updateStore();
 
@@ -128,9 +128,9 @@ public class StoreActivity extends AppCompatActivity {
         lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TTS_text = "선택하신 메뉴 "+foodName+"에 대한 검색 결과 입니다.\n"+resultTest;
                 if(check ==0) {
                     //TTS
+                    TTS_text = "선택하신 메뉴 "+foodName+"에 대한 검색 결과 입니다.\n"+resultTest;
                     mRecognizer.cancel();
                     tts.speak(TTS_text, TextToSpeech.QUEUE_FLUSH, null);
                     check=1;
@@ -216,6 +216,7 @@ public class StoreActivity extends AppCompatActivity {
                 storeListText = storeListText.concat(Integer.toString(i + 1)).concat(" " + storeList[i] + "\n");
             }
             test.setText(storeListText);
+            resultTest=storeListText;
         }
     };
 
@@ -359,43 +360,50 @@ public class StoreActivity extends AppCompatActivity {
             if(STT_text.equals("뒤로")){
                 finish();
             }
-            else if(select == 0) {
+            else if(select == -1) {
                 tts.speak("음성인식으로 번호를 다시 입력 해주세요.", TextToSpeech.QUEUE_FLUSH, null);
             }
             else{
-
                 Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                 id = storeAndId.get(storeList[select]);
-                intent.putExtra("store", storeList[select]);
-                intent.putExtra("id", id);
+                intent.putExtra("storeName", storeList[select]);
+                intent.putExtra("id", idList[select]);
                 startActivity(intent);
             }
         }
 
 
         public int checkStore (String text){
-            int sizeofList = storeList.length;
-            int checkSize=9+1;
+            int sizeofList = storeList.length+1;
+            int checkSize=15+1;
             String [][] checkNum = new String[checkSize][sizeofList];
             for(int i=1;i<sizeofList;i++){
                 String KoreaNum=transNum(i);
+                String storecheck = storeList[i-1].replace(" ","");
                 checkNum[1][i]=KoreaNum+"번";
                 checkNum[2][i]=KoreaNum+"본";
+                checkNum[10][i]=KoreaNum+"분";
                 checkNum[3][i]= String.valueOf(i);
-                checkNum[4][i]=checkNum[1][i]+storeList[i];
-                checkNum[5][i]=checkNum[2][i]+storeList[i];
-                checkNum[6][i]=checkNum[3][i]+storeList[i];
-                checkNum[7][i]=storeList[i];
+                checkNum[4][i]=checkNum[1][i]+storecheck;
+                checkNum[5][i]=checkNum[2][i]+storecheck;
+                checkNum[6][i]=checkNum[3][i]+storecheck;
+                checkNum[12][i]=checkNum[10][i]+storecheck;
+                checkNum[7][i]=storecheck;
                 checkNum[8][i]= String.valueOf(i)+"번";
                 checkNum[9][i]= String.valueOf(i)+"본";
+                checkNum[11][i]= String.valueOf(i)+"분";
+                checkNum[13][i]= String.valueOf(i)+"번"+storecheck;
+                checkNum[14][i]= String.valueOf(i)+"본"+storecheck;
+                checkNum[15][i]= String.valueOf(i)+"분"+storecheck;
             }
+            Toast.makeText(getApplicationContext(),"확인용:"+checkNum[4][5],Toast.LENGTH_SHORT).show();
             //select는 식당 번호
-            int select=0;
+            int select=-1;
             //CheckSize는 check의 가지 수
             for(int i=1;i<sizeofList;i++) {
                 for (int j = 1; j < checkSize; j++) {
                     if (text.equals(checkNum[j][i])){
-                        select=i;
+                        select=i-1;
                     }
                 }
             }

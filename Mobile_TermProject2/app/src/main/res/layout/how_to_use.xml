@@ -33,10 +33,11 @@
                 android:id="@+id/textViewPlan"
                 android:layout_width="374dp"
                 android:layout_height="match_parent"
-                android:textSize="20sp"
-                android:text="사용법은 다음과 같습니다. \n\n1. 처음 터치시 음성이 출력됩니다.\n\n2. 두번째 터치 후 말씀 하시면 됩니다.\n\n3. 다시 듣고 싶으시면 한번 더 터치하시면 됩니다.\n\n4. 어디서든 뒤로 이동하고 싶으시면 뒤로 라고 말씀해 주시면 됩니다."
+                android:textSize="35sp"
+                android:text="사용법은 다음과 같습니다. \n\n1. 한 번 터치시 음성이 출력됩니다.\n\n2. 두번째 터치 후 말씀 하시면 됩니다.\n\n3. 다시 듣고 싶으시면 한번 더 터치하시면 됩니다.\n\n4. 어디서든 뒤로 이동하고 싶으시면 뒤로 라고 말씀해 주시면 됩니다."
                 android:textAlignment="center"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/bm"/>
         </LinearLayout>
     </HorizontalScrollView>
 

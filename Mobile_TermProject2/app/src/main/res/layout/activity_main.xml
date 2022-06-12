@@ -32,15 +32,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.11" />
+        app:layout_constraintVertical_bias="0.11"
+        android:fontFamily="@font/bm"/>
 
     <Button
         android:id="@+id/howToUse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="How to Use"
-        android:textSize="20sp"
+        android:text="사용법"
+        android:textSize="25sp"
+        android:fontFamily="@font/bm"
         android:backgroundTint="#F56D91"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,8 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#F56D91"
-        android:textSize="20sp"
-        android:text="Start"
+        android:textSize="25sp"
+        android:text="시작"
+        android:fontFamily="@font/bm"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

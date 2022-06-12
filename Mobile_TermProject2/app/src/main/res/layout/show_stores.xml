@@ -29,27 +29,32 @@
                 android:layout_marginRight="10dp"
                 android:backgroundTint="#F56D91"
                 android:text="@string/prev"
+                android:textSize="20sp"
+                android:fontFamily="@font/bm"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <EditText
                 android:id="@+id/inputStoreName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
                 android:background="#DFDFDE"
-                android:text="식당이름"></EditText>
+                android:fontFamily="@font/bm"
+                android:text="식당 이름"></EditText>
 
             <Button
                 android:id="@+id/btnToMenu"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:backgroundTint="#F56D91"
-                android:text="식당선택"
+                android:text="식당 선택"
+                android:textSize="20sp"
+                android:fontFamily="@font/bm"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
@@ -67,7 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="null"
-                android:textSize="30dp"></TextView>
+                android:textSize="30dp"
+                android:fontFamily="@font/bm"
+                ></TextView>
 
         </FrameLayout>
 

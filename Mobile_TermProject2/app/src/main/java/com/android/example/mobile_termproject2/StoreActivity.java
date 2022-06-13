@@ -38,7 +38,7 @@ public class StoreActivity extends AppCompatActivity {
     String id = "";
     private String url = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=";
     private Document doc = null;
-    private String storeClass = "OXiLu";
+    private String storeClass = "place_bluelink OXiLu";
     private String totalStores = "";
     private String totalids = "";
     private int storeCount = 0;
@@ -82,13 +82,12 @@ public class StoreActivity extends AppCompatActivity {
 
         test = findViewById(R.id.test);
         //메뉴 받기
-        foodName= getIntent().getStringExtra("food");
+        while (foodName.equals("null")) foodName= getIntent().getStringExtra("food");
+//        foodName= getIntent().getStringExtra("food");
         editText = findViewById(R.id.inputStoreName);
         resultTest="잠시만 기다려주세요.";
         //keyword = editText.getText().toString();
         updateStore();
-
-
 
         Button btnPrev= (Button)findViewById(R.id.btnPrev);
         btnPrev.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +111,6 @@ public class StoreActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
 
         //이미지 및 TTS 설정
         lay=findViewById(R.id.activityStore);
@@ -410,7 +408,6 @@ public class StoreActivity extends AppCompatActivity {
             return select;
         }
 
-        
         public String transNum(int num){
             String[] number = {"", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"};
             String[] Unit = {"","십"};
